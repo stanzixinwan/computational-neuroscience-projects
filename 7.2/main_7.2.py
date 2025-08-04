@@ -73,7 +73,8 @@ def plot_phase_plane(r, title):
         plt.tight_layout()
         plt.show()
 
-def run_question(q):
+# Full loop for all questions
+def run_all_questions():
     T = 3.0
     dt = 0.0001
     tau = 0.01
@@ -81,22 +82,22 @@ def run_question(q):
     pulse_info = (1.0, 2.0, 20, 0)
     time = np.arange(0, T, dt)
 
-    q_num = q
-    W, Theta = get_params(q_num)
-    n_units = len(Theta)
-    initial_conditions = [[0] * n_units, [50] * n_units]
+    for q_num in range(1, 10):
+        W, Theta = get_params(q_num)
+        n_units = len(Theta)
+        initial_conditions = [[0] * n_units, [50] * n_units]
 
-    for r_init in initial_conditions:
-        I_app = np.zeros((len(time), n_units))
-        t_on, t_off, amp, unit = pulse_info
-        if unit < n_units:
-            I_app[int(t_on/dt):int(t_off/dt), unit] = amp
+        for r_init in initial_conditions:
+            I_app = np.zeros((len(time), n_units))
+            t_on, t_off, amp, unit = pulse_info
+            if unit < n_units:
+                I_app[int(t_on/dt):int(t_off/dt), unit] = amp
 
-        r = simulate_with_initial(W, Theta, I_app, r_init=r_init, r_max=r_max, tau=tau, T=T, dt=dt)
+            r = simulate_with_initial(W, Theta, I_app, r_init=r_init, r_max=r_max, tau=tau, T=T, dt=dt)
 
-        title = f"Q{q_num} | Init {r_init}"
-        plot_time_series(time, r, title + " - Time Series")
-        if n_units == 2:
-             plot_phase_plane(r, title + " - Phase Plane")
+            title = f"Q{q_num} | Init {r_init}"
+            plot_time_series(time, r, title + " - Time Series")
+            if n_units == 2:
+                plot_phase_plane(r, title + " - Phase Plane")
 
-run_question(1)
+run_all_questions()

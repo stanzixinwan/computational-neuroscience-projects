@@ -192,7 +192,7 @@ Iapp = np.zeros(len(t))  # No applied current
 VS, VD, Ca = integrate_PR(Iapp, G_Link)
 
 # Detect somatic spikes (crossing -10mV threshold from below)
-spike_threshold = -0.01  # -10mV in volts
+spike_threshold = -0.03  # -30mV in volts
 spikes = np.where((VS[:-1] < spike_threshold) & (VS[1:] >= spike_threshold))[0]
 
 # Plot with detected spikes
@@ -226,6 +226,7 @@ plt.grid()
 plt.show()
 
 I_values = [50e-12, 100e-12, 200e-12]  # 50pA, 100pA, 200pA
+G_Link = 50e-9  # Conductance linking soma & dendrite
 
 # Plot Effect of Injecting Current into the Dendrite
 fig, axs = plt.subplots(3, 1, figsize=(8, 9), sharex=True)
