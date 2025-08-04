@@ -1,0 +1,52 @@
+# Question 3: Final-timepoint firing rates (excitatory)
+fig, axs = plt.subplots(1, 3, figsize=(15, 6), sharey=True)
+for i, net_name in enumerate(["A", "B", "C"]):
+    rE_matrix = np.array([results[net_name]["rE"][c][-1, :] for c in contrasts]).T
+    axs[i].imshow(rE_matrix, cmap='hot', aspect='auto', extent=[contrasts[0], contrasts[-1], N, 0])
+    axs[i].set_title(f'{net_name} Excitatory')
+    axs[i].set_xlabel('Contrast')
+    axs[i].set_ylabel('Neuron index')
+plt.tight_layout()
+plt.show()
+
+# Question 3: Final-timepoint firing rates (inhibitory)
+fig, axs = plt.subplots(1, 3, figsize=(15, 6), sharey=True)
+for i, net_name in enumerate(["A", "B", "C"]):
+    rI_matrix = np.array([results[net_name]["rI"][c][-1, :] for c in contrasts]).T
+    axs[i].imshow(rI_matrix, cmap='hot', aspect='auto', extent=[contrasts[0], contrasts[-1], N, 0])
+    axs[i].set_title(f'{net_name} Inhibitory')
+    axs[i].set_xlabel('Contrast')
+    axs[i].set_ylabel('Neuron index')
+plt.tight_layout()
+plt.show()
+
+# Question 4: Normalize each column by mean (excitatory)
+fig, axs = plt.subplots(1, 3, figsize=(15, 6), sharey=True)
+for i, net_name in enumerate(["A", "B", "C"]):
+    valid_contrasts = [c for c in contrasts if c > 0]
+    rE_matrix = np.array([results[net_name]["rE"][c][-1, :] for c in valid_contrasts]).T
+    col_mean = np.mean(rE_matrix, axis=0, keepdims=True)
+    threshold = 0.1
+    col_mean[col_mean < threshold] = 1
+    rE_norm = rE_matrix / col_mean
+    axs[i].imshow(rE_norm, cmap='hot', aspect='auto', extent=[valid_contrasts[0], valid_contrasts[-1], N, 0])
+    axs[i].set_title(f'{net_name} Excitatory (Norm by Mean)')
+    axs[i].set_xlabel('Contrast')
+    axs[i].set_ylabel('Neuron index')
+plt.tight_layout()
+plt.show()
+
+# Question 4: Normalize each column by mean (inhibitory)
+fig, axs = plt.subplots(1, 3, figsize=(15, 6), sharey=True)
+for i, net_name in enumerate(["A", "B", "C"]):
+    valid_contrasts = [c for c in contrasts if c > 0]
+    rI_matrix = np.array([results[net_name]["rI"][c][-1, :] for c in valid_contrasts]).T
+    col_mean = np.mean(rI_matrix, axis=0, keepdims=True)
+    col_mean[col_mean < threshold] = 1
+    rI_norm = rI_matrix / col_mean
+    axs[i].imshow(rI_norm, cmap='hot', aspect='auto', extent=[valid_contrasts[0], valid_contrasts[-1], N, 0])
+    axs[i].set_title(f'{net_name} Inhibitory (Norm by Mean)')
+    axs[i].set_xlabel('Contrast')
+    axs[i].set_ylabel('Neuron index')
+plt.tight_layout()
+plt.show()
